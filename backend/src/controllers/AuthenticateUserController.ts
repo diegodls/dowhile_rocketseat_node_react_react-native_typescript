@@ -17,5 +17,3 @@ class AuthenticateUserController {
 }
 
 export { AuthenticateUserController };
-
-//parei 53:10
