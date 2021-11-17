@@ -1,20 +1,12 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
-import {COLORS} from '../../theme';
+import { COLORS } from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: COLORS.BLACK_SECONDARY,
-  },
-  text: {
-    fontSize: 40,
-    fontWeight: 'bold',
-  },
-  textRoboto: {
-    fontFamily: 'Roboto-Medium',
-    fontSize: 40,
+    paddingTop: getStatusBarHeight(),
   },
 });
