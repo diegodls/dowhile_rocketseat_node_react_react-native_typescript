@@ -5,25 +5,33 @@ import { Message } from '../Message';
 import { styles } from './styles';
 
 export function MessageList() {
+  const message = {
+    id: '1',
+    text: 'mensagem de teste',
+    user: {
+      name: 'Diego',
+      avatar: 'https://www.github.com/diegodls.png',
+    },
+  };
   return (
     <>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="never">
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
+        <Message data={message} />
       </ScrollView>
     </>
   );
