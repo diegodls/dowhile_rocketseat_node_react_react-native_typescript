@@ -14,6 +14,8 @@ export function SignInBox() {
           title="ENTRAR COM GITHUB"
           color={COLORS.BLACK_PRIMARY}
           backgroundColor={COLORS.YELLOW}
+          icon="github"
+          isLoading={false}
         />
       </View>
     </>

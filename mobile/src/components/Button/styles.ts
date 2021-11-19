@@ -14,4 +14,5 @@ export const styles = StyleSheet.create({
     fontFamily: FONTS.BOLD,
     color: '#1D1D1D',
   },
+  icon: { marginRight: 12 },
 });
