@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { authorize } from 'react-native-app-auth';
 
 type User = {
   id: string;
@@ -18,6 +19,8 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+/*
+
 type AuthResponse = {
   token: string;
   user: User;
@@ -29,30 +32,54 @@ type AuthorizationResponse = {
   };
 };
 
+*/
+
+type AuthResponse = {
+  accessToken?: string;
+  authorizeAdditionalParameters?: {};
+  idToken?: string;
+  refreshToken?: string;
+  scopes?: string[];
+  tokenAdditionalParameters?: {};
+  tokenType?: string;
+};
+
 export const AuthContext = createContext({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isSigningIn, setIsSigningIn] = useState(false);
 
-  const CLIENT_ID = '';
-  const SCOPE = '';
-
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPE}`;
+  const CLIENT_ID: string = '4847f282d9816d96cb29';
+  const SECRET: string = '7587939c879d409768a2a24b541f688998a47d0d';
+  const SCOPES: string[] = ['identity'];
 
   async function signIn() {
+    console.log('Logando - signIn hook');
+
     setIsSigningIn(true);
 
-    const response = await fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+    const config = {
+      redirectUrl: 'com.diegodls.nlwheat.auth://oauthredirect',
+      clientId: CLIENT_ID,
+      clientSecret: SECRET,
+      scopes: SCOPES,
+      additionalHeaders: { Accept: 'application/json' },
+      serviceConfiguration: {
+        authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+        tokenEndpoint: 'https://github.com/login/oauth/access_token',
+        revocationEndpoint: `https://github.com/settings/connections/applications/${CLIENT_ID}`,
       },
-    });
+    };
 
-    const { id, name, login, avatar_url } = await response.json();
+    try {
+      const authState: AuthResponse = await authorize(config);
 
-    setUser({ id, name, login, avatar_url });
-    setIsSigningIn(false);
+      console.log(`Token: ${authState}`);
+      console.log(authState);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async function signOut() {
