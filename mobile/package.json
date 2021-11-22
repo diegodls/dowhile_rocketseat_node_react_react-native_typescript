@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "hermes-engine": "0.9.0",
     "moti": "^0.16.1",
     "react": "17.0.2",
