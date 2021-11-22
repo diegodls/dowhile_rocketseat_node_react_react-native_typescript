@@ -1,5 +1,7 @@
+import axios from 'axios';
 import React, { createContext, useContext, useState } from 'react';
 import { authorize } from 'react-native-app-auth';
+import { api } from '../services/api';
 
 type User = {
   id: string;
@@ -34,7 +36,7 @@ type AuthorizationResponse = {
 
 */
 
-type AuthResponse = {
+type AuthStateResponse = {
   accessToken?: string;
   authorizeAdditionalParameters?: {};
   idToken?: string;
@@ -42,6 +44,7 @@ type AuthResponse = {
   scopes?: string[];
   tokenAdditionalParameters?: {};
   tokenType?: string;
+  authorizationCode?: string;
 };
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -51,8 +54,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [isSigningIn, setIsSigningIn] = useState(false);
 
   const CLIENT_ID: string = '4847f282d9816d96cb29';
-  const SECRET: string = '7587939c879d409768a2a24b541f688998a47d0d';
-  const SCOPES: string[] = ['identity'];
+  const SCOPES: string[] = ['read:user'];
 
   async function signIn() {
     console.log('Logando - signIn hook');
@@ -62,9 +64,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     const config = {
       redirectUrl: 'com.diegodls.nlwheat.auth://oauthredirect',
       clientId: CLIENT_ID,
-      clientSecret: SECRET,
       scopes: SCOPES,
-      additionalHeaders: { Accept: 'application/json' },
+      skipCodeExchange: true,
       serviceConfiguration: {
         authorizationEndpoint: 'https://github.com/login/oauth/authorize',
         tokenEndpoint: 'https://github.com/login/oauth/access_token',
@@ -73,11 +74,21 @@ function AuthProvider({ children }: AuthProviderProps) {
     };
 
     try {
-      const authState: AuthResponse = await authorize(config);
-
-      console.log(`Token: ${authState}`);
+      const authState: AuthStateResponse = await authorize(config);
+      console.log(`authState: ${authState}`);
       console.log(authState);
+
+      if (authState && authState.authorizationCode) {
+        const AuthResponse = await api.post('/authenticate', {
+          code: authState.authorizationCode,
+        });
+
+        console.log('AuthResponse.data');
+        console.log(AuthResponse.data);
+      }
+      setIsSigningIn(true);
     } catch (error) {
+      setIsSigningIn(false);
       throw error;
     }
   }
