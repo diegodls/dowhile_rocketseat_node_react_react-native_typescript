@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.11",
     "axios": "^0.24.0",
     "hermes-engine": "0.9.0",
     "moti": "^0.16.1",
