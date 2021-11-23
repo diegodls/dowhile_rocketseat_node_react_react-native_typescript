@@ -1,7 +1,12 @@
-import axios from 'axios';
-import React, { createContext, useContext, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authorize } from 'react-native-app-auth';
 import { api } from '../services/api';
+
+const CLIENT_ID: string = '4847f282d9816d96cb29';
+const SCOPES: string[] = ['read:user'];
+const USER_STORAGE: string = '@nlwheat:user';
+const TOKEN_STORAGE: string = '@nlwheat:token';
 
 type User = {
   id: string;
@@ -11,7 +16,7 @@ type User = {
 };
 
 type AuthContextData = {
-  user: User | null;
+  userLogged: User | null;
   isSigningIn: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -21,47 +26,26 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
-/*
-
-type AuthResponse = {
+type OauthGithubResponse = {
   token: string;
   user: User;
 };
 
-type AuthorizationResponse = {
-  params: {
-    code?: string;
-  };
-};
-
-*/
-
-type AuthStateResponse = {
-  accessToken?: string;
-  authorizeAdditionalParameters?: {};
-  idToken?: string;
-  refreshToken?: string;
-  scopes?: string[];
-  tokenAdditionalParameters?: {};
-  tokenType?: string;
+type AuthorizationGithubResponse = {
   authorizationCode?: string;
 };
 
 export const AuthContext = createContext({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isSigningIn, setIsSigningIn] = useState(false);
-
-  const CLIENT_ID: string = '4847f282d9816d96cb29';
-  const SCOPES: string[] = ['read:user'];
+  const [userLogged, setUserLogged] = useState<User | null>(null);
+  const [isSigningIn, setIsSigningIn] = useState(true);
 
   async function signIn() {
     console.log('Logando - signIn hook');
 
-    setIsSigningIn(true);
-
-    const config = {
+    //MOVER ESSA FUNÇÃO PARA HELPERS
+    const oauthGithubConfig = {
       redirectUrl: 'com.diegodls.nlwheat.auth://oauthredirect',
       clientId: CLIENT_ID,
       scopes: SCOPES,
@@ -74,31 +58,59 @@ function AuthProvider({ children }: AuthProviderProps) {
     };
 
     try {
-      const authState: AuthStateResponse = await authorize(config);
-      console.log(`authState: ${authState}`);
-      console.log(authState);
-
-      if (authState && authState.authorizationCode) {
-        const AuthResponse = await api.post('/authenticate', {
-          code: authState.authorizationCode,
-        });
-
-        console.log('AuthResponse.data');
-        console.log(AuthResponse.data);
-      }
       setIsSigningIn(true);
-    } catch (error) {
+      const oauthGithubResponse: AuthorizationGithubResponse = await authorize(
+        oauthGithubConfig,
+      );
+
+      console.log(oauthGithubResponse);
+
+      if (oauthGithubResponse && oauthGithubResponse.authorizationCode) {
+        const authResponse = await api.post('/authenticate', {
+          code: oauthGithubResponse.authorizationCode,
+        });
+        const { token, user } = authResponse.data as OauthGithubResponse;
+
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
+        await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
+        await AsyncStorage.setItem(TOKEN_STORAGE, JSON.stringify(token));
+
+        setUserLogged(user);
+      }
+    } catch (error: any) {
+      console.log(error);
+      console.log(error.code);
+    } finally {
       setIsSigningIn(false);
-      throw error;
     }
   }
 
   async function signOut() {
-    setUser(null);
+    setUserLogged(null);
+    await AsyncStorage.removeItem(USER_STORAGE);
+    await AsyncStorage.removeItem(TOKEN_STORAGE);
+    console.log(userLogged);
   }
 
+  useEffect(() => {
+    async function loadUserStorageData() {
+      const userStorage = await AsyncStorage.getItem(USER_STORAGE);
+      const tokenStorage = await AsyncStorage.getItem(TOKEN_STORAGE);
+
+      if (userStorage && tokenStorage) {
+        api.defaults.headers.common.Authorization = `Bearer ${tokenStorage}`;
+        setUserLogged(JSON.parse(userStorage));
+      } else {
+        setUserLogged(null);
+      }
+
+      setIsSigningIn(false);
+    }
+    loadUserStorageData();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, isSigningIn, signIn, signOut }}>
+    <AuthContext.Provider value={{ userLogged, isSigningIn, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
