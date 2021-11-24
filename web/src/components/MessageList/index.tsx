@@ -20,8 +20,6 @@ const messagesQueue: Message[] = [];
 const socket = io("http://localhost:4000");
 
 socket.on("new_message", (newMessage: Message) => {
-  console.log("new_message", newMessage);
-
   messagesQueue.push(newMessage);
 });
 
