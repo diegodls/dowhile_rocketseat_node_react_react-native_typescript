@@ -15,7 +15,7 @@ export function Header() {
       <LogoSvg />
 
       <View style={styles.logoutButton}>
-        {userLogged && (
+        {true && (
           <TouchableOpacity>
             <Text style={styles.logoutText} onPress={signOut}>
               Sair

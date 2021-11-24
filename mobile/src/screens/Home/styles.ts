@@ -4,6 +4,9 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { COLORS } from '../../theme';
 
 export const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.BLACK_SECONDARY,

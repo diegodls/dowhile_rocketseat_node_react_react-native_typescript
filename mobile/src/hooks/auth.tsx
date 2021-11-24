@@ -42,8 +42,6 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [isSigningIn, setIsSigningIn] = useState(true);
 
   async function signIn() {
-    console.log('Logando - signIn hook');
-
     //MOVER ESSA FUNÇÃO PARA HELPERS
     const oauthGithubConfig = {
       redirectUrl: 'com.diegodls.nlwheat.auth://oauthredirect',
@@ -63,8 +61,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         oauthGithubConfig,
       );
 
-      console.log(oauthGithubResponse);
-
       if (oauthGithubResponse && oauthGithubResponse.authorizationCode) {
         const authResponse = await api.post('/authenticate', {
           code: oauthGithubResponse.authorizationCode,
@@ -73,7 +69,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         api.defaults.headers.common.Authorization = `Bearer ${token}`;
         await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
-        await AsyncStorage.setItem(TOKEN_STORAGE, JSON.stringify(token));
+        await AsyncStorage.setItem(TOKEN_STORAGE, token);
 
         setUserLogged(user);
       }
@@ -89,7 +85,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     setUserLogged(null);
     await AsyncStorage.removeItem(USER_STORAGE);
     await AsyncStorage.removeItem(TOKEN_STORAGE);
-    console.log(userLogged);
   }
 
   useEffect(() => {
