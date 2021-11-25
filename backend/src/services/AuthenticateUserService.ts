@@ -15,13 +15,29 @@ interface IUserResponse {
 }
 
 class AuthenticateUserService {
-  async execute(code: string) {
+  async execute(code: string, type: string) {
+    let CLIENT_ID = "";
+    let CLIENT_SECRET = "";
+
+    switch (type) {
+      case "web":
+        CLIENT_ID = process.env.GITHUB_CLIENT_ID_WEB;
+        CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET_WEB;
+        break;
+
+      case "mobile":
+        CLIENT_ID = process.env.GITHUB_CLIENT_ID_MOBILE;
+        CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET_MOBILE;
+        break;
+    }
+
     const url = "https://github.com/login/oauth/access_token";
+
     const { data: accessTokenResponse } =
       await axios.post<IAccessTokenResponse>(url, null, {
         params: {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
           code,
         },
         headers: {
