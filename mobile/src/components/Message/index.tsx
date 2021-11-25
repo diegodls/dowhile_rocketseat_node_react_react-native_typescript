@@ -11,7 +11,7 @@ export type MessageProps = {
   text: string;
   user: {
     name: string;
-    avatar: string;
+    avatar_url: string;
   };
 };
 
@@ -31,7 +31,7 @@ export function Message({ data }: Props) {
       <View style={styles.container}>
         <Text style={styles.message}>{data.text}</Text>
         <View style={styles.footer}>
-          <UserPhoto imageUri={data.user.avatar} sizes="SMALL" />
+          <UserPhoto imageUri={data.user.avatar_url} sizes="SMALL" />
           <Text style={styles.userName}>{data.user.name}</Text>
         </View>
       </View>
