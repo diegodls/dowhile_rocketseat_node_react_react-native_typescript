@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authorize } from 'react-native-app-auth';
 import { api } from '../services/api';
 
+const REDIRECT_URL: string = 'com.diegodls.nlwheat.auth://oauthredirect';
 const CLIENT_ID: string = '4847f282d9816d96cb29';
 const SCOPES: string[] = ['read:user'];
 const USER_STORAGE: string = '@nlwheat:user';
@@ -42,9 +43,8 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [isSigningIn, setIsSigningIn] = useState(true);
 
   async function signIn() {
-    //MOVER ESSA FUNÇÃO PARA HELPERS
     const oauthGithubConfig = {
-      redirectUrl: 'com.diegodls.nlwheat.auth://oauthredirect',
+      redirectUrl: REDIRECT_URL,
       clientId: CLIENT_ID,
       scopes: SCOPES,
       skipCodeExchange: true,
@@ -64,14 +64,18 @@ function AuthProvider({ children }: AuthProviderProps) {
       if (oauthGithubResponse && oauthGithubResponse.authorizationCode) {
         const authResponse = await api.post('/authenticate', {
           code: oauthGithubResponse.authorizationCode,
+          type: 'mobile',
         });
         const { token, user } = authResponse.data as OauthGithubResponse;
 
         api.defaults.headers.common.Authorization = `Bearer ${token}`;
-        await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
-        await AsyncStorage.setItem(TOKEN_STORAGE, token);
 
-        setUserLogged(user);
+        if (token && token !== undefined && user && user !== undefined) {
+          await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
+          await AsyncStorage.setItem(TOKEN_STORAGE, token);
+
+          setUserLogged(user);
+        }
       }
     } catch (error: any) {
       console.log(error);

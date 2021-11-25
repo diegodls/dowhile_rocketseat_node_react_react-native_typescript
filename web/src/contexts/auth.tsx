@@ -36,20 +36,28 @@ export function AuthProvider(props: AuthProvider) {
   // Sem o redirect configurado no github
   // const signInUrl = `https://github.com/login/oauth/authorize?scope=user&client_id=${}&redirect_uri=http://localhost:3000`
 
-  const signInUrl = `https://github.com/login/oauth/authorize?scope=user&client_id=${"70e16479b18e4ea349cd"}`;
+  const signInUrl = `https://github.com/login/oauth/authorize?scope=user&client_id=b962cf1959d2157f54bf`;
 
   async function signIn(githubCode: string) {
-    const response = await api.post<AuthResponse>("authenticate", {
-      code: githubCode,
-    });
+    try {
+      const response = await api.post<AuthResponse>("authenticate", {
+        code: githubCode.trim(),
+        type: "web",
+      });
+      const { token, user } = response.data;
 
-    const { token, user } = response.data;
+      api.defaults.headers.common.authorization = `Bearer ${token}`;
 
-    api.defaults.headers.common.authorization = `Bearer ${token}`;
+      if (token && token !== undefined) {
+        localStorage.setItem("@dowhile:token", token);
+      }
 
-    localStorage.setItem("@dowhile:token", token);
-
-    setUser(user);
+      if (user && user !== undefined) {
+        setUser(user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function signOut() {
@@ -60,10 +68,10 @@ export function AuthProvider(props: AuthProvider) {
   useEffect(() => {
     const token = localStorage.getItem("@dowhile:token");
 
-    if (token) {
+    if (token && token !== undefined) {
       api.defaults.headers.common.authorization = `Bearer ${token}`;
 
-      api.get<User>("profile").then((response) => {
+      api.get<User>("/profile").then((response) => {
         setUser(response.data);
       });
     }
