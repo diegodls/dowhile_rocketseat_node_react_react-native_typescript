@@ -14,7 +14,7 @@
   align-self: flex-start;
   border: 0;
   color: #c4c4cc;
-  position: relative;  
+  position: relative;
   cursor: pointer;
   &:hover {
     filter: brightness(0.9);
@@ -56,6 +56,9 @@
   svg {
     margin-right: 8px;
   }
+}
+.userLogin {
+  font-size: 0.8rem;
 }
 
 .sendMessageForm {
@@ -112,5 +115,12 @@
     &:hover {
       filter: brightness(0.9);
     }
+  }
+}
+
+
+@media (max-width: 971px) {
+  .sendMessageFormWrapper {
+    width: 100%;
   }
 }

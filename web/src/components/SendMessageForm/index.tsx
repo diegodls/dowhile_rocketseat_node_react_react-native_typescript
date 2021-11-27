@@ -31,7 +31,7 @@ export function SendMessageForm() {
         <strong className={styles.userName}>{user?.name}</strong>
         <span className={styles.userGithub}>
           <VscGithubInverted size='16' />
-          {user?.login}
+          <strong className={styles.userLogin}> {user?.login}</strong>
         </span>
       </header>
       <form className={styles.sendMessageForm}>
@@ -42,6 +42,8 @@ export function SendMessageForm() {
           placeholder='Qual sua expectativa para o evento?'
           onChange={(event) => setMessage(event.target.value)}
           value={message}
+          minLength={1}
+          maxLength={140}
         />
         <button onClick={handleSendMessage} type='submit'>
           Enviar Mensagem
