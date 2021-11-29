@@ -1,7 +1,14 @@
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authorize } from 'react-native-app-auth';
 import { api } from '../services/api';
+import { useModal } from './modal';
 
 const REDIRECT_URL: string = 'com.diegodls.nlwheat.auth://oauthredirect';
 const CLIENT_ID: string = '4847f282d9816d96cb29';
@@ -24,7 +31,7 @@ type AuthContextData = {
 };
 
 type AuthProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 type OauthGithubResponse = {
@@ -36,11 +43,13 @@ type AuthorizationGithubResponse = {
   authorizationCode?: string;
 };
 
-export const AuthContext = createContext({} as AuthContextData);
+const AuthContext = createContext({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [userLogged, setUserLogged] = useState<User | null>(null);
   const [isSigningIn, setIsSigningIn] = useState(true);
+
+  const { openModal } = useModal();
 
   async function signIn() {
     const oauthGithubConfig = {
@@ -78,6 +87,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         }
       }
     } catch (error: any) {
+      openModal('Erro', `Erro ao autenticar: ${error.code}`);
       console.log(error);
       console.log(error.code);
     } finally {

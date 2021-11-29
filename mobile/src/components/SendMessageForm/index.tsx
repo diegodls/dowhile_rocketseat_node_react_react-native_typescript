@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, Keyboard } from 'react-native';
+import { View, TextInput, Keyboard } from 'react-native';
+import { useModal } from '../../hooks/modal';
 import { api } from '../../services/api';
 import { COLORS } from '../../theme';
 import { Button } from '../Button';
@@ -10,17 +11,25 @@ export function SendMessageForm() {
   const [message, setMessage] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
 
+  const { openModal } = useModal();
+
   async function handleSendMessage() {
     const messageFormatted = message.trim();
+
     if (messageFormatted.length > 0) {
       setSendingMessage(true);
-      await api.post('messages', { message: messageFormatted });
-      setMessage('');
-      Keyboard.dismiss();
-      Alert.alert('Mensagem enviada com sucesso!');
-      setSendingMessage(false);
+      try {
+        await api.post('messages', { message: messageFormatted });
+        setMessage('');
+        Keyboard.dismiss();
+        openModal('Sucesso', 'Mensagem enviada com sucesso!');
+        setSendingMessage(false);
+      } catch (error) {
+        openModal('Erro', `Erro ao enviar a mensagem! ${error}`);
+        setSendingMessage(false);
+      }
     } else {
-      Alert.alert('Erro', 'Por favor, preencha o campo de mensagem');
+      openModal('Erro', 'Digite uma mensagem antes!');
       setSendingMessage(false);
     }
   }
