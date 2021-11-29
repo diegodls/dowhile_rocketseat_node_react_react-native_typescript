@@ -94,6 +94,18 @@
       color: #8d8d99;
     }
   }
+}
+
+.sendButtonContainer {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  p {
+    color: #8d8d99;
+  }
+
   button {
     align-self: flex-end;
     background: #ff0083;
@@ -117,7 +129,6 @@
     }
   }
 }
-
 
 @media (max-width: 971px) {
   .sendMessageFormWrapper {

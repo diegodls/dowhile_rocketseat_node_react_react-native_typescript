@@ -1,0 +1,51 @@
+.backDrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 390px;
+  height: auto;
+  background-color: #29292e;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+
+  strong {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  p {
+    color: #fff;
+    margin-top: 16px;
+  }
+
+  button {
+    align-self: flex-end;
+    background: #ff0083;
+    border: 0;
+    cursor: pointer;
+    padding: 0 32px;
+    margin-top: 16px;
+    height: 40px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}

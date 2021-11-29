@@ -1,6 +1,7 @@
 import { FormEvent, useContext, useState } from "react";
 import { VscGithubInverted, VscSignOut } from "react-icons/vsc";
 import { AuthContext } from "../../contexts/auth";
+import { ModalContext } from "../../contexts/modal";
 import { api } from "../../services/api";
 import styles from "./styles.module.scss";
 
@@ -8,9 +9,12 @@ export function SendMessageForm() {
   const { user, signOut } = useContext(AuthContext);
   const [message, setMessage] = useState("");
 
+  const { openModal } = useContext(ModalContext);
+
   async function handleSendMessage(event: FormEvent) {
     event.preventDefault();
     if (!message.trim()) {
+      openModal("Erro", "Digite uma mensagem antes!");
       return;
     }
     await api.post("messages", { message }).then(() => {
@@ -45,9 +49,12 @@ export function SendMessageForm() {
           minLength={1}
           maxLength={140}
         />
-        <button onClick={handleSendMessage} type='submit'>
-          Enviar Mensagem
-        </button>
+        <div className={styles.sendButtonContainer}>
+          <p>{140 - message.length}</p>
+          <button onClick={handleSendMessage} type='submit'>
+            Enviar Mensagem
+          </button>
+        </div>
       </form>
     </div>
   );

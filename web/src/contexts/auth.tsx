@@ -1,5 +1,12 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { api } from "../services/api";
+import { ModalContext } from "./modal";
 
 type User = {
   id: string;
@@ -33,6 +40,8 @@ export const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider(props: AuthProvider) {
   const [user, setUser] = useState<User | null>(null);
 
+  const { openModal } = useContext(ModalContext);
+
   // Sem o redirect configurado no github
   // const signInUrl = `https://github.com/login/oauth/authorize?scope=user&client_id=${}&redirect_uri=http://localhost:3000`
 
@@ -56,6 +65,7 @@ export function AuthProvider(props: AuthProvider) {
         setUser(user);
       }
     } catch (error) {
+      openModal("Erro!", `Ocorreu o seguinte erro: ${error}`);
       console.log(error);
     }
   }
