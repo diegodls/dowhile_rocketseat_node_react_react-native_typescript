@@ -23,17 +23,6 @@ export function ModalProvider(props: ModalProvider) {
     "Algo inesperado aconteceu!"
   );
 
-  function openModalWeb(
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    title: string,
-    message: string
-  ) {
-    e.preventDefault();
-    setTitleModal(title);
-    setMessageModal(message);
-    setShowModal(true);
-  }
-
   function openModal(title: string, message: string) {
     setTitleModal(title);
     setMessageModal(message);
