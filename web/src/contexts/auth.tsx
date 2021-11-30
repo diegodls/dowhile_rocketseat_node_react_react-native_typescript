@@ -37,7 +37,7 @@ type AuthResponse = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export function AuthProvider(props: AuthProvider) {
+function AuthProvider(props: AuthProvider) {
   const [user, setUser] = useState<User | null>(null);
 
   const { openModal } = useContext(ModalContext);
@@ -106,3 +106,15 @@ export function AuthProvider(props: AuthProvider) {
     </AuthContext.Provider>
   );
 }
+
+function useAuth() {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("Erro ao usar contexto de autorização (AuthContext)");
+  }
+
+  return context;
+}
+
+export { AuthProvider, useAuth };

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 type ModalContextData = {
   showModal: boolean;
@@ -16,7 +16,7 @@ type ModalProvider = {
 
 export const ModalContext = createContext({} as ModalContextData);
 
-export function ModalProvider(props: ModalProvider) {
+function ModalProvider(props: ModalProvider) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [titleModal, setTitleModal] = useState<string>("Erro");
   const [messageModal, setMessageModal] = useState<string>(
@@ -51,3 +51,15 @@ export function ModalProvider(props: ModalProvider) {
     </ModalContext.Provider>
   );
 }
+
+function useModal() {
+  const context = useContext(ModalContext);
+
+  if (!context) {
+    throw new Error("Erro ao usar contexto do Modal(ModalContext)");
+  }
+
+  return context;
+}
+
+export { ModalProvider, useModal };
