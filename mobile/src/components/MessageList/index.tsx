@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import { io } from 'socket.io-client';
 
 import { api } from '../../services/api';
@@ -11,6 +11,7 @@ import { styles } from './styles';
 let messagesQueue: MessageProps[] = [];
 
 const socket = io(String(api.defaults.baseURL));
+
 socket.on('new_message', newMessage => {
   messagesQueue.push(newMessage);
 });
@@ -30,11 +31,9 @@ export function MessageList() {
   useEffect(() => {
     const timer = setInterval(() => {
       if (messagesQueue.length > 0) {
-        setCurrentMessages(prevState => [
-          messagesQueue[0],
-          prevState[0],
-          prevState[1],
-        ]);
+        setCurrentMessages(prevState =>
+          [messagesQueue[0], prevState[0], prevState[1]].filter(Boolean),
+        );
         messagesQueue.shift();
       }
     }, 3000);
@@ -44,14 +43,25 @@ export function MessageList() {
 
   return (
     <>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="never">
-        {currentMessages.map(message => (
-          <Message key={message.id} data={message} />
-        ))}
-      </ScrollView>
+      {currentMessages.length > 0 ? (
+        <View style={styles.container}>
+          <ScrollView
+            style={styles.scrollViewContainer}
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="never">
+            {currentMessages.map(message => (
+              <Message key={message.id} data={message} />
+            ))}
+          </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.noMessagesContainer}>
+          <Text style={styles.noMessagesTitle}>Sem Mensagens!</Text>
+          <Text style={styles.noMessagesSubTitle}>
+            Seja o primeiro a deixar uma mensagem!
+          </Text>
+        </View>
+      )}
     </>
   );
 }
