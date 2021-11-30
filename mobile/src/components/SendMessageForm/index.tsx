@@ -18,16 +18,19 @@ export function SendMessageForm() {
 
     if (messageFormatted.length > 0) {
       setSendingMessage(true);
-      try {
-        await api.post('messages', { message: messageFormatted });
-        setMessage('');
-        Keyboard.dismiss();
-        openModal('Sucesso', 'Mensagem enviada com sucesso!');
-        setSendingMessage(false);
-      } catch (error) {
-        openModal('Erro', `Erro ao enviar a mensagem! ${error}`);
-        setSendingMessage(false);
-      }
+      await api
+        .post('messages', { message: messageFormatted })
+        .then(() => {
+          setMessage('');
+          Keyboard.dismiss();
+          openModal('Sucesso', 'Mensagem enviada com sucesso!');
+          setSendingMessage(false);
+        })
+        .catch(error => {
+          console.log(error);
+          openModal('Erro', 'Não foi possível enviar a mensagem!');
+          setSendingMessage(false);
+        });
     } else {
       openModal('Erro', 'Digite uma mensagem antes!');
       setSendingMessage(false);

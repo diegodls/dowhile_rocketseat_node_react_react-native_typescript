@@ -1,25 +1,31 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 import { VscGithubInverted, VscSignOut } from "react-icons/vsc";
-import { AuthContext } from "../../contexts/auth";
-import { ModalContext } from "../../contexts/modal";
+import { useAuth } from "../../contexts/auth";
+import { useModal } from "../../contexts/modal";
 import { api } from "../../services/api";
 import styles from "./styles.module.scss";
 
 export function SendMessageForm() {
-  const { user, signOut } = useContext(AuthContext);
   const [message, setMessage] = useState("");
 
-  const { openModal } = useContext(ModalContext);
+  const { user, signOut } = useAuth();
+  const { openModal } = useModal();
 
   async function handleSendMessage(event: FormEvent) {
     event.preventDefault();
-    if (!message.trim()) {
+    if (message.trim()) {
+      await api
+        .post("messages", { message })
+        .then(() => {
+          setMessage("");
+        })
+        .catch(() => {
+          openModal("Erro", "Não foi possível enviar a mensagem!");
+        });
+    } else {
       openModal("Erro", "Digite uma mensagem antes!");
       return;
     }
-    await api.post("messages", { message }).then(() => {
-      setMessage("");
-    });
   }
 
   return (
