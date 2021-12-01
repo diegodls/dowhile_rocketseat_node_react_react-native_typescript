@@ -64,7 +64,7 @@ JWT_SECRET =
 * Após a criação da aplicação Oauth, gere a *Client secrets* e salve (_IMPORTANTE: salve assim que gerar, se recarregar a pagian, ela será ocultada_) junto com a *Client Id*, ambas serão usadas no backend (PASSO 1), caso tenha optado por usar a versão web da aplicação.
 *Agora você já pode executar o projeto (_backend deve estar sendo executado antes_) com o comando: ```yarn dev```.
 
-**2 - Mobile:**
+**3 - Mobile:**
 
 * Abra um prompt de comando/cmd/terminal na pasta raiz ou navegue até ela, insira o comando `npx isntall` ou `npm install` ou `yarn install`, dependendo do gerenciador de pacotes usado, este comando serve para instalar os pacotes/módulos utilizado nesse projeto;
 * Após a instalação dos pacotes/módulos, abra o projeto com seu editor([VS Code](https://code.visualstudio.com/)?), abra o arquivo ```/mobile/src/hooks/auth.tsx``` e adicione as seguintes infomações que devem ser gerada ao [criar uma nova aplicação Oauth no Github](https://docs.github.com/pt/developers/apps/building-oauth-apps/creating-an-oauth-app) nas constantes ```REDIRECT_URL``` e ```CLIENT_ID```;
@@ -81,6 +81,8 @@ No mobile varia de como está sendo feita as requisições(expo, firebase, entre
 
 * Agora você já pode executar o projeto (_backend deve estar sendo executado antes_) com o comando: ```yarn android``` (ou ```yarn ios```, ```npx react-native start```, ou utilize o gerenciador de sua preferência).
 
+* Nota: as versões web e mobile não dependem uma da outra, mas ambas dependem do backend, então PASSO 1 é obrigátorio, independente se for usar somente a WEB ou o MOBILE!
+* 
 # 🔩 Módulos
 Neste projeto foram utilizado os seguintes módulos:</br>
 
