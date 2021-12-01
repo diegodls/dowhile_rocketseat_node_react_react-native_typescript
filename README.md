@@ -81,7 +81,7 @@ No mobile varia de como está sendo feita as requisições(expo, firebase, entre
 
 * Agora você já pode executar o projeto (_backend deve estar sendo executado antes_) com o comando: ```yarn android``` (ou ```yarn ios```, ```npx react-native start```, ou utilize o gerenciador de sua preferência).
 
-* Nota: as versões web e mobile não dependem uma da outra, mas ambas dependem do backend, então PASSO 1 é obrigátorio, independente se for usar somente a WEB ou o MOBILE!
+* Nota: as versões web e mobile não dependem uma da outra, mas ambas dependem do backend, então PASSO 1 é obrigátorio, independente se for usar somente a WEB ou o MOBILE! </br.</br>
 * 
 # 🔩 Módulos
 Neste projeto foram utilizado os seguintes módulos:</br>
