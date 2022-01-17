@@ -53,27 +53,27 @@ JWT_SECRET =
 
 **2 - Web:**
 
-* Abra um prompt de comando/cmd/terminal na pasta raiz ou navegue até ela, insira o comando `npx isntall` ou `npm install` ou `yarn install`, dependendo do gerenciador de pacotes usado, este comando serve para instalar os pacotes/módulos utilizado nesse projeto;
+* Abra um prompt de comando/cmd/terminal na pasta raiz ou navegue até ela, insira o comando `npx install` ou `npm install` ou `yarn install`, dependendo do gerenciador de pacotes usado, este comando serve para instalar os pacotes/módulos utilizado nesse projeto;
 * Após a instalação dos pacotes/módulos, abra o projeto com seu editor([VS Code](https://code.visualstudio.com/)?), abra o arquivo ```/web/src/contexts/auth.tsx``` e adicione a CLIENT_ID gerada ao [criar uma nova aplicação Oauth no Github](https://docs.github.com/pt/developers/apps/building-oauth-apps/creating-an-oauth-app);
 * Explicação rápida:</br>
 
 **Application name**: _Necessário, nome da aplicação (poder ser qualquer um de fácil identificação)_</br></br>
 **Homepage URL**: _Necessário, URL (link) da aplicação, caso seja apenas para teste(igual este projeto), pode ser qualquer url, se tiver feito deploy, utilize a url do deploy_. </br></br>
-**Application description**: _Opicional, descrição da aplicação._. </br></br>
+**Application description**: _Opcional, descrição da aplicação._. </br></br>
 **Authorization callback URL**: _Necessário, url que será chamada após a autorização, deve ser a url que irá tratar da autorização, neste caso, é a própria aplicação(que vai mandar o código para a API), ex: ```http://localhost:3000```_. </br></br>
 * Após a criação da aplicação Oauth, gere a *Client secrets* e salve (_IMPORTANTE: salve assim que gerar, se recarregar a pagian, ela será ocultada_) junto com a *Client Id*, ambas serão usadas no backend (PASSO 1), caso tenha optado por usar a versão web da aplicação.
 *Agora você já pode executar o projeto (_backend deve estar sendo executado antes_) com o comando: ```yarn dev```.
 
 **3 - Mobile:**
 
-* Abra um prompt de comando/cmd/terminal na pasta raiz ou navegue até ela, insira o comando `npx isntall` ou `npm install` ou `yarn install`, dependendo do gerenciador de pacotes usado, este comando serve para instalar os pacotes/módulos utilizado nesse projeto;
+* Abra um prompt de comando/cmd/terminal na pasta raiz ou navegue até ela, insira o comando `npx install` ou `npm install` ou `yarn install`, dependendo do gerenciador de pacotes usado, este comando serve para instalar os pacotes/módulos utilizado nesse projeto;
 * Após a instalação dos pacotes/módulos, abra o projeto com seu editor([VS Code](https://code.visualstudio.com/)?), abra o arquivo ```/mobile/src/hooks/auth.tsx``` e adicione as seguintes infomações que devem ser gerada ao [criar uma nova aplicação Oauth no Github](https://docs.github.com/pt/developers/apps/building-oauth-apps/creating-an-oauth-app) nas constantes ```REDIRECT_URL``` e ```CLIENT_ID```;
 
 * Explicação rápida:</br>
 
 **Application name**: _Necessário, nome da aplicação (poder ser qualquer um de fácil identificação)_</br></br>
 **Homepage URL**: _Necessário, URL (link) da aplicação, como mobile "não" possui url, utilize ```http://localhost:3000```_. </br></br>
-**Application description**: _Opicional, descrição da aplicação._. </br></br>
+**Application description**: _Opcional, descrição da aplicação._. </br></br>
 **Authorization callback URL**: _Necessário, url que será chamada após a autorização,. </br></br>
 No mobile varia de como está sendo feita as requisições(expo, firebase, entre outros), no caso caso dessa aplicação, é utilizado o pacote [react-native-app-auth](https://github.com/FormidableLabs/react-native-app-auth), que utiliza um "scheme" para voltar para o app após a requisição de login, e algumas modificações devem ser feitas [seguindo esta issue](https://github.com/FormidableLabs/react-native-app-auth/issues/494), caso não queira fazer essas modificações, utilize esta url: ```com.diegodls.nlwheat.auth://oauthredirect``` como _Authorization callback URL_ e não terá problemas_. </br></br>
 
@@ -81,7 +81,7 @@ No mobile varia de como está sendo feita as requisições(expo, firebase, entre
 
 * Agora você já pode executar o projeto (_backend deve estar sendo executado antes_) com o comando: ```yarn android``` (ou ```yarn ios```, ```npx react-native start```, ou utilize o gerenciador de sua preferência).
 
-* Nota: as versões web e mobile não dependem uma da outra, mas ambas dependem do backend, então PASSO 1 é obrigátorio, independente se for usar somente a WEB ou o MOBILE! </br></br>
+* Nota: as versões web e mobile não dependem uma da outra, mas ambas dependem do backend, então PASSO 1 é obrigatório, independente se for usar somente a WEB ou o MOBILE! </br></br>
 
 
 # 🔩 Módulos
@@ -125,7 +125,7 @@ socket.io-client </br>
 Como se trata de um projeto rápido, muitos tópicos não foram abordados, então, tomei a liberdade de fazer algumas modificações e aplicar alguns conhecimentos, tais como:</br>
 Responsividade. </br>
 Tratamento de erros. </br>
-Backend agora aceita multiplas plataformas (web/mobile) simultaneamente. </br>
+Backend agora aceita múltiplas plataformas (web/mobile) simultaneamente. </br>
 Avisos visuais(erros e outros). </br>
 Melhorias visuais. </br></br>
 No projeto mobile, como não utilizei o *expo* como no projeto original, tive que recriar boa parte dos códigos e funções para se adequar ao react native cli.
